@@ -1,0 +1,32 @@
+-- init_db.sql for CashZilla demo
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  balance INT DEFAULT 0,
+  level INT DEFAULT 1,
+  last_daily BIGINT DEFAULT 0,
+  watch_start BIGINT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS withdrawals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  acc_name VARCHAR(200),
+  acc_no VARCHAR(200),
+  ifsc VARCHAR(100),
+  amount INT,
+  status VARCHAR(20) DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  amount INT,
+  reason VARCHAR(255),
+  ts BIGINT,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
